@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "deplens"
+version = "0.1.0"
+description = "DepLens — local-first, open-source dependency health explorer for npm projects"
+readme = "../README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "The DepLens Authors" }]
+keywords = ["dependencies", "npm", "security", "sbom", "supply-chain", "dependency-graph"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = [
+    "fastapi>=0.115,<0.116",
+    "uvicorn[standard]>=0.32,<0.33",
+    "pydantic>=2.10,<3",
+    "httpx>=0.28,<0.29",
+    "networkx>=3.2,<4",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.25", "ruff>=0.8", "respx>=0.22"]
+
+[project.scripts]
+deplens = "deplens.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["deplens*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "W"]
+ignore = ["B008"]  # FastAPI uses function calls in argument defaults (Depends/Query)
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
