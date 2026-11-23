@@ -9,11 +9,18 @@ on:
 jobs:
   backend:
     name: Backend (Python ${{ matrix.python-version }})
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.11", "3.12"]
+        include:
+          # Python 3.9 is EOL and not available on ubuntu-latest (26.04)
+          - python-version: "3.9"
+            os: ubuntu-22.04
+          - python-version: "3.11"
+            os: ubuntu-latest
+          - python-version: "3.12"
+            os: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
